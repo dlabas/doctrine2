@@ -19,7 +19,9 @@
 
 namespace Doctrine\ORM\Tools;
 
+use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
@@ -31,12 +33,22 @@ use Doctrine\ORM\Mapping\ClassMetadata;
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @since 2.2
  */
-class ResolveTargetEntityListener
+class ResolveTargetEntityListener implements EventSubscriber
 {
     /**
      * @var array
      */
     private $resolveTargetEntities = array();
+    
+    /**
+     * Returns an array of events this subscriber wants to listen to.
+     *
+     * @return array
+     */
+    public function getSubscribedEvents()
+    {
+        return array(Events::loadClassMetadata);
+    }
 
     /**
      * Adds a target-entity class name to resolve to a new class name.
